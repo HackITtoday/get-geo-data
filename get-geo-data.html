@@ -1,0 +1,117 @@
+  <dom-module id="get-geo-data">
+    <template>
+      <h1>Get-Data</h1>
+      <firebase-collection location="{{location}}" data="{{dataH}}"></firebase-collection>
+    </template>
+    
+    <script>
+      
+(function() {
+  Polymer({
+    is: 'get-geo-data',
+    properties: {
+      data:{
+        type: Array,
+        notify: true
+      },
+      geo: {
+        type: String,
+        value:"gbuj1gzehv05",
+      },
+      location:String,
+      dataH:Object
+    },
+    observers: ['dataChanged(data.*)'],
+    dataChanged: function(data) {
+      console.log("data changed",data);
+    },
+    observers: ['geoHashChanged(geo.*,dataH.*)'],
+    geoHashChanged: function(data,dataH) {
+      console.log("geo changed",data);
+      console.log("dataH changed",dataH);
+      this.loadData();
+      console.log("calling loadData");
+    },
+    loadData: function () { console.log("loadData");
+      if (this.geo !== "") {
+        var mapCenter = this.geo;
+        var mapNeighbors = [];
+      
+        mapNeighbors.push(calculateAdjacent(mapCenter.substring(0,4),'top'));
+        mapNeighbors.push(calculateAdjacent(mapCenter.substring(0,4),'bottom'));
+        mapNeighbors.push(calculateAdjacent(mapCenter.substring(0,4),'right'));
+        mapNeighbors.push(calculateAdjacent(mapCenter.substring(0,4),'left'));
+      
+        mapNeighbors.push(calculateAdjacent(mapNeighbors[3],'top'));
+        mapNeighbors.push(calculateAdjacent(mapNeighbors[2],'top'));
+        mapNeighbors.push(calculateAdjacent(mapNeighbors[3],'bottom'));
+        mapNeighbors.push(calculateAdjacent(mapNeighbors[2],'bottom'));
+      
+        var keys = mapCenter.match(/.{1,2}/g);
+        var findKeys = function (obj, keys, path) {
+          var key = keys.shift();
+          path += key+'';
+          if (key !== undefined && obj !== null) {
+            if (!obj.hasOwnProperty(key)) {
+              // find next and prevers
+              return {obj:obj,path:path.substring(0,path.length - key.length)};
+            } else {
+              if (keys.length === 0) {
+                return {obj:obj,path:path.substring(0,path.length - key.length)};
+              }
+            } 
+            return findKeys(obj[key], keys, path)
+          }
+        }
+        var path = '';
+        var loaded = findKeys(this.dataH,keys,path);
+        this.data = objectToArray(flattenObject(loaded.obj, loaded.path, this.data));
+        //set in timeout
+        this.loadedNeighbors = [];
+        for (var x in mapNeighbors) {
+          this.loadedNeighbors.push( findKeys(this.dataH,mapNeighbors[x].match(/.{1,2}/g),path));
+        }
+        
+      }
+    },
+  });
+  var objectToArray = function(obj) {
+    var arr =[];
+function logArrayElements(element, index, array) {
+  console.log('a[' + index + '] = ' + element);
+ // arr.push(obj[]);
+}
+    Object.keys(obj).forEach(logArrayElements);
+        
+    
+    console.log("objectToArray", arr);
+    return arr;
+  }
+  var flattenObject = function(ob, addToKey, add) {
+    var toReturn = {};
+    for (var i in ob) {
+      if (!ob.hasOwnProperty(i)) continue;
+      if ((typeof ob[i]) == 'object') {
+        if (Array.isArray(ob[i])) {
+          var flatObject = ob[i];
+        } else {
+          var flatObject = flattenObject(ob[i],'',{});
+        }
+        for (var x in flatObject) {
+          if (!flatObject.hasOwnProperty(x)) continue;
+          toReturn[addToKey+i+x] = flatObject[x];
+        }
+        for (var x in add) {
+          if (!flatObject.hasOwnProperty(x)) continue;
+          toReturn[addToKey+i+x] = flatObject[x];
+        }
+      } else {
+        toReturn[addToKey+i] = ob[i];
+      }
+    }
+    return toReturn;
+  };
+})();
+
+    </script>
+  </dom-module>
