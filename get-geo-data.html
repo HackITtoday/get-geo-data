@@ -2,7 +2,6 @@
 <link rel="import" href="../firebase-element/firebase-document.html">
   <dom-module id="get-geo-data">
     <template>
-      <h1>Get Geo Data</h1>
       <firebase-document location="{{location}}" data="{{dataH}}"></firebase-document>
     </template>
     
@@ -73,6 +72,13 @@
         for (var x in mapNeighbors) {
           this.loadedNeighbors.push( findKeys(this.dataH,mapNeighbors[x].match(/.{1,2}/g),path));
         }
+        
+        setTimeout(function(){ 
+          var app = document.querySelectorAll('html /deep/ #get-geo-data')[0];
+          for (var x in app.loadedNeighbors) {
+            app.data = objectToArray(flattenObject(app.loadedNeighbors[x].obj, app.loadedNeighbors[x].path, app.data));
+          }
+        },1000);
         
       }
     },
