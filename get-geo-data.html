@@ -75,9 +75,11 @@
         
         setTimeout(function(){ 
           var app = document.querySelectorAll('html /deep/ #get-geo-data')[0];
-          for (var x in app.loadedNeighbors) {
-            app.data = objectToArray(flattenObject(app.loadedNeighbors[x].obj, app.loadedNeighbors[x].path, app.data));
-          }
+          console.log("loading more ", app);
+          
+          var x = app.loadedNeighbors.pop()
+          app.data = objectToArray(flattenObject(app.loadedNeighbors[x].obj, app.loadedNeighbors[x].path, app.data));
+          
         },1000);
         
       }
@@ -89,7 +91,6 @@
       arr.push(obj[element]);
     }
     Object.keys(obj).forEach(logArrayElements);
-    console.log("objectToArray", arr);
     return arr;
   }
   var flattenObject = function(ob, addToKey, add) {
