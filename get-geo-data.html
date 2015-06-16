@@ -77,8 +77,8 @@
           var app = document.querySelectorAll('html /deep/ get-geo-data')[0];
           console.log("loading more ", app);
           
-          var x = app.loadedNeighbors.pop()
-          app.data = objectToArray(flattenObject(app.loadedNeighbors[x].obj, app.loadedNeighbors[x].path, app.data));
+          var x = app.loadedNeighbors.pop();
+          app.data = objectToArray(flattenObject(x.obj, x.path, app.data));
           
         },1000);
         
