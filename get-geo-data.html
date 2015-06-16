@@ -1,8 +1,9 @@
 <link rel="import" href="geohash-js/geohash-js.html">
+<link rel="import" href="firebase-element/firebase-document.html">
   <dom-module id="get-geo-data">
     <template>
-      <h1>Get-Data</h1>
-      <firebase-collection location="{{location}}" data="{{dataH}}"></firebase-collection>
+      <h1>Get Geo Data</h1>
+      <firebase-document location="{{location}}" data="{{dataH}}"></firebase-document>
     </template>
     
     <script>
