@@ -1,7 +1,7 @@
 <link rel="import" href="../geohash-js/geohash-js.html">
 <link rel="import" href="../firebase-element/firebase-document.html">
   <dom-module id="get-geo-data">
-    <template id="get-geo-data-template">
+    <template id="geoTemplate">
       <firebase-document location="{{location}}" data="{{dataH}}"></firebase-document>
     </template>
     
@@ -74,7 +74,7 @@
         }
         
         setTimeout(function(){ 
-          var app = document.querySelectorAll('html /deep/ #get-geo-data-template')[0];
+          var app = document.querySelectorAll('html /deep/ #geoTemplate')[0];
           console.log("loading more ", app);
           
           var x = app.loadedNeighbors.pop()
