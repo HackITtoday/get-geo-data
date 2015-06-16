@@ -79,13 +79,10 @@
   });
   var objectToArray = function(obj) {
     var arr =[];
-function logArrayElements(element, index, array) {
-  console.log('a[' + index + '] = ' + element);
- // arr.push(obj[]);
-}
+    function logArrayElements(element, index, array) {
+      arr.push(obj[element]);
+    }
     Object.keys(obj).forEach(logArrayElements);
-        
-    
     console.log("objectToArray", arr);
     return arr;
   }
