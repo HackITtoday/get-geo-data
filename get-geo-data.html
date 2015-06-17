@@ -66,7 +66,7 @@
         }
         var path = '';
         var loaded = findKeys(this.dataH,keys,path);
-        this.data = byCenter(objectToArray(flattenObject(loaded.obj, loaded.path, this.data)), this.geo, 20);
+        this.data = objectToArray(flattenObject(loaded.obj, loaded.path, this.data));
         //set in timeout
         this.loadedNeighbors = [];
         for (var x in mapNeighbors) {
@@ -79,7 +79,7 @@
           
           var x = app.loadedNeighbors.pop();
           
-          app.data = byCenter(objectToArray(flattenObject(x.obj, x.path, app.data)), app.geo, 20);
+          app.data = objectToArray(flattenObject(x.obj, x.path, app.data));
           
         },1000);
       }
@@ -98,7 +98,7 @@
     for (var i in ob) {
       if (!ob.hasOwnProperty(i)) continue;
       if ((typeof ob[i]) == 'object') {
-        if (Array.isArray(ob[i])) {
+        if (Array.isArray(ob[i])) {
           var flatObject = ob[i];
         } else {
           var flatObject = flattenObject(ob[i],'',{});
