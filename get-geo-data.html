@@ -8,6 +8,7 @@
     <script>
       
 (function() {
+  var nIntervId;
   Polymer({
     is: 'get-geo-data',
     properties: {
@@ -72,16 +73,20 @@
         for (var x in mapNeighbors) {
           this.loadedNeighbors.push( findKeys(this.dataH,mapNeighbors[x].match(/.{1,2}/g),path));
         }
-        
-        setTimeout(function(){ 
+        clearInterval(nIntervId);
+
+        var loadMoreData = function(){ 
           var app = document.querySelectorAll('html /deep/ get-geo-data')[0];
           console.log("loading more ", app);
-          
-          var x = app.loadedNeighbors.pop();
-          
-          app.data = objectToArray(flattenObject(x.obj, x.path, app.data));
-          
-        },1000);
+
+          if (app.loadedNeighbors.length !== 0) {
+            var x = app.loadedNeighbors.pop();
+            app.data = objectToArray(flattenObject(x.obj, x.path, app.data));
+          } else {
+            clearInterval(nIntervId);
+          }
+        };
+        nIntervId = setInterval(loadMoreData, 100);
       }
     }
   });
@@ -98,7 +103,7 @@
     for (var i in ob) {
       if (!ob.hasOwnProperty(i)) continue;
       if ((typeof ob[i]) == 'object') {
-        if (Array.isArray(ob[i])) {
+        if (Array.isArray(ob[i])) {
           var flatObject = ob[i];
         } else {
           var flatObject = flattenObject(ob[i],'',{});
