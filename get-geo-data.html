@@ -66,7 +66,7 @@
         }
         var path = '';
         var loaded = findKeys(this.dataH,keys,path);
-        this.data = this.byCenter(objectToArray(flattenObject(loaded.obj, loaded.path, this.data)));
+        this.data = byCenter(objectToArray(flattenObject(loaded.obj, loaded.path, this.data)), this.geo, 20);
         //set in timeout
         this.loadedNeighbors = [];
         for (var x in mapNeighbors) {
