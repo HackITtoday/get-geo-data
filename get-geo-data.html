@@ -79,7 +79,7 @@
           
           var x = app.loadedNeighbors.pop();
           
-          app.data = byCenter(objectToArray(flattenObject(x.obj, x.path, app.data)), this.geo, 20);
+          app.data = byCenter(objectToArray(flattenObject(x.obj, x.path, app.data)), app.geo, 20);
           
         },1000);
       }
