@@ -78,7 +78,7 @@
           console.log("loading more ", app);
           
           var x = app.loadedNeighbors.pop();
-          app.data = this.byCenter(objectToArray(flattenObject(x.obj, x.path, app.data)));
+          app.data = app.byCenter(objectToArray(flattenObject(x.obj, x.path, app.data)));
         },1000);
         
       }
