@@ -16,6 +16,10 @@
         type: Array,
         notify: true
       },
+      cat: {
+        type: Array,
+        value:[{type:"hotels"},{type:"a"},{type:"d"}]
+      }
       geo: {
         type: String,
         value:"gzzzzzzzzzzz",
@@ -39,9 +43,7 @@
       }
     },
     loadCat: function () {
-      if (this.cat.length < 0) {
-        this.data = [{type:"hotels"},{type:"a"},{type:"d"}];
-      }
+        this.data = this.cat;
     },
     loadData: function () { console.log("loadData");
       if (this.geo !== "") {
