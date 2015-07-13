@@ -31,7 +31,7 @@
     geoHashChanged: function(data,dataH) {
       console.log("geo changed",data);
       console.log("dataH changed",dataH);
-      if (geo != "gzzzzzzzzzzz") {
+      if (this.geo != "gzzzzzzzzzzz") {
         this.loadData();
         console.log("calling loadData");
       }
