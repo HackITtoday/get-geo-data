@@ -34,8 +34,15 @@
       if (this.geo != "gzzzzzzzzzzz") {
         this.loadData();
         console.log("calling loadData");
+      } else {
+        this.loadData()
       }
     },
+    loadcat: function () {
+      if (this.cat.length < 0) {
+        this.data = [{type:"hotels"},{type:"a"},{type:"d"}];
+      }
+    }
     loadData: function () { console.log("loadData");
       if (this.geo !== "") {
         var mapCenter = this.geo;
