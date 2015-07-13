@@ -18,7 +18,7 @@
       },
       geo: {
         type: String,
-        value:"gbuj1gzehv05",
+        value:"gzzzzzzzzzzz",
       },
       location:String,
       dataH:Object
@@ -31,8 +31,10 @@
     geoHashChanged: function(data,dataH) {
       console.log("geo changed",data);
       console.log("dataH changed",dataH);
-      this.loadData();
-      console.log("calling loadData");
+      if (geo != "gzzzzzzzzzzz") {
+        this.loadData();
+        console.log("calling loadData");
+      }
     },
     loadData: function () { console.log("loadData");
       if (this.geo !== "") {
