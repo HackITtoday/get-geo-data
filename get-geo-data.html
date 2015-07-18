@@ -1,8 +1,9 @@
 <link rel="import" href="../geohash-js/geohash-js.html">
-<link rel="import" href="../firebase-element/firebase-document.html">
+<link rel="import" href="../bower_components/geo-hash-data/geo-hash-data.html">
+
   <dom-module id="get-geo-data">
     <template id="geoTemplate">
-      <firebase-document location="{{location}}" data="{{dataH}}"></firebase-document>
+      <geo-hash-data output="{{dataH}}"></geo-hash-data>
     </template>
     
     <script>
