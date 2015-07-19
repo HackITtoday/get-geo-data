@@ -1,140 +1,136 @@
 <link rel="import" href="../geohash-js/geohash-js.html">
 <link rel="import" href="../geo-hash-data/geo-hash-data.html">
 
-  <dom-module id="get-geo-data">
-    <template id="geoTemplate">
-      <geo-hash-data output="{{dataH}}"></geo-hash-data>
-    </template>
-    
-    <script>
-      
-(function() {
-  var nIntervId;
-  Polymer({
-    is: 'get-geo-data',
-    properties: {
-      data:{
-        type: Array,
-        notify: true
-      },
-      cat: {
-        type: Array,
-        value:[{type:"Hotels"},{type:"Things to Do"},{type:"Destinations"},{type:"Food & Drink"}]
-      },
-      geo: {
-        type: String,
-        value:"gzzzzzzzzzzz",
-      },
-      location:String,
-      dataH:Object
-    },
-    observers: ['dataChanged(data.*)'],
-    dataChanged: function(data) {
-      console.log("data changed",data);
-    },
-    observers: ['geoHashChanged(geo.*,dataH.*)'],
-    geoHashChanged: function(data,dataH) {
-      console.log("geo changed",data);
-      console.log("dataH changed",dataH);
-      if (this.geo != "gzzzzzzzzzzz") {
-        this.loadData();
-        console.log("calling loadData");
-      } else {
-        this.loadCat()
-      }
-    },
-    loadCat: function () {
-        this.data = this.cat;
-    },
-    loadData: function () { console.log("loadData");
-      if (this.geo !== "") {
-        var mapCenter = this.geo;
-        var mapNeighbors = [];
-      
-        mapNeighbors.push(calculateAdjacent(mapCenter.substring(0,4),'top'));
-        mapNeighbors.push(calculateAdjacent(mapCenter.substring(0,4),'bottom'));
-        mapNeighbors.push(calculateAdjacent(mapCenter.substring(0,4),'right'));
-        mapNeighbors.push(calculateAdjacent(mapCenter.substring(0,4),'left'));
-      
-        mapNeighbors.push(calculateAdjacent(mapNeighbors[3],'top'));
-        mapNeighbors.push(calculateAdjacent(mapNeighbors[2],'top'));
-        mapNeighbors.push(calculateAdjacent(mapNeighbors[3],'bottom'));
-        mapNeighbors.push(calculateAdjacent(mapNeighbors[2],'bottom'));
-      
-        var keys = mapCenter.match(/.{1,2}/g);
-        var findKeys = function (obj, keys, path) {
-          var key = keys.shift();
-          path += key+'';
-          if (key !== undefined && obj !== null) {
-            if (!obj.hasOwnProperty(key)) {
-              // find next and prevers
-              return {obj:obj,path:path.substring(0,path.length - key.length)};
-            } else {
-              if (keys.length === 0) {
-                return {obj:obj,path:path.substring(0,path.length - key.length)};
-              }
-            } 
-            return findKeys(obj[key], keys, path)
-          }
-        }
-        var path = '';
-        var loaded = findKeys(this.dataH,keys,path);
-        this.data = objectToArray(flattenObject(loaded.obj, loaded.path, this.data));
-        //set in timeout
-        this.loadedNeighbors = [];
-        for (var x in mapNeighbors) {
-          this.loadedNeighbors.push( findKeys(this.dataH,mapNeighbors[x].match(/.{1,2}/g),path));
-        }
-        clearInterval(nIntervId);
-
-        var loadMoreData = function(){ 
-          var app = document.querySelectorAll('html /deep/ get-geo-data')[0];
-          console.log("loading more ", app);
-
-          if (app.loadedNeighbors.length !== 0) {
-            var x = app.loadedNeighbors.pop();
-            app.data = objectToArray(flattenObject(x.obj, x.path, app.data));
+<dom-module id="get-geo-data">
+  <template id="geoTemplate">
+     <geo-hash-data output="{{dataH}}"></geo-hash-data>
+  </template>
+                    
+  <script>
+    (function() {
+      var nIntervId;
+      Polymer({
+        is: 'get-geo-data',
+        properties: {
+          data:{
+            type: Array,
+            notify: true
+          },
+          cat: {
+            type: Array,
+            value:[{type:"Hotels"},{type:"Things to Do"},{type:"Destinations"},{type:"Food & Drink"}]
+          },
+          geo: {
+            type: String,
+            value:"gzzzzzzzzzzz",
+          },
+          location:String,
+          dataH:Object
+        },
+        observers: ['dataChanged(data.*)'],
+        dataChanged: function(data) {
+          console.log("data changed",data);
+        },
+        observers: ['geoHashChanged(geo.*,dataH.*)'],
+        geoHashChanged: function(data,dataH) {
+          console.log("geo changed",data);
+          console.log("dataH changed",dataH);
+          if (this.geo != "gzzzzzzzzzzz") {
+            this.loadData();
+            console.log("calling loadData");
           } else {
-            clearInterval(nIntervId);
+            this.loadCat()
           }
-        };
-        nIntervId = setInterval(loadMoreData, 100);
+        },
+        loadCat: function () {
+            this.data = this.cat;
+        },
+        loadData: function () { console.log("loadData");
+          if (this.geo !== "") {
+            var mapCenter = this.geo;
+            var mapNeighbors = [];
+          
+            mapNeighbors.push(calculateAdjacent(mapCenter.substring(0,4),'top'));
+            mapNeighbors.push(calculateAdjacent(mapCenter.substring(0,4),'bottom'));
+            mapNeighbors.push(calculateAdjacent(mapCenter.substring(0,4),'right'));
+            mapNeighbors.push(calculateAdjacent(mapCenter.substring(0,4),'left'));
+          
+            mapNeighbors.push(calculateAdjacent(mapNeighbors[3],'top'));
+            mapNeighbors.push(calculateAdjacent(mapNeighbors[2],'top'));
+            mapNeighbors.push(calculateAdjacent(mapNeighbors[3],'bottom'));
+            mapNeighbors.push(calculateAdjacent(mapNeighbors[2],'bottom'));
+          
+            var keys = mapCenter.match(/.{1,2}/g);
+            var findKeys = function (obj, keys, path) {
+              var key = keys.shift();
+              path += key+'';
+              if (key !== undefined && obj !== null) {
+                if (!obj.hasOwnProperty(key)) {
+                  // find next and prevers
+                  return {obj:obj,path:path.substring(0,path.length - key.length)};
+                } else {
+                  if (keys.length === 0) {
+                    return {obj:obj,path:path.substring(0,path.length - key.length)};
+                  }
+                } 
+                return findKeys(obj[key], keys, path)
+              }
+            }
+            var path = '';
+            var loaded = findKeys(this.dataH,keys,path);
+            this.data = objectToArray(flattenObject(loaded.obj, loaded.path, this.data));
+            //set in timeout
+            this.loadedNeighbors = [];
+            for (var x in mapNeighbors) {
+              this.loadedNeighbors.push( findKeys(this.dataH,mapNeighbors[x].match(/.{1,2}/g),path));
+            }
+            clearInterval(nIntervId);
+            var loadMoreData = function(){ 
+              var app = document.querySelectorAll('html /deep/ get-geo-data')[0];
+              console.log("loading more ", app);
+              if (app.loadedNeighbors.length !== 0) {
+                var x = app.loadedNeighbors.pop();
+                app.data = objectToArray(flattenObject(x.obj, x.path, app.data));
+              } else {
+                clearInterval(nIntervId);
+              }
+            };
+            nIntervId = setInterval(loadMoreData, 100);
+          }
+        }
+      });
+      var objectToArray = function(obj) {
+        var arr =[];
+        function logArrayElements(element, index, array) {
+          arr.push(obj[element]);
+        }
+        Object.keys(obj).forEach(logArrayElements);
+        return arr;
       }
-    }
-  });
-  var objectToArray = function(obj) {
-    var arr =[];
-    function logArrayElements(element, index, array) {
-      arr.push(obj[element]);
-    }
-    Object.keys(obj).forEach(logArrayElements);
-    return arr;
-  }
-  var flattenObject = function(ob, addToKey, add) {
-    var toReturn = {};
-    for (var i in ob) {
-      if (!ob.hasOwnProperty(i)) continue;
-      if ((typeof ob[i]) == 'object') {
-        if (Array.isArray(ob[i])) {
-          var flatObject = ob[i];
-        } else {
-          var flatObject = flattenObject(ob[i],'',{});
+      var flattenObject = function(ob, addToKey, add) {
+        var toReturn = {};
+        for (var i in ob) {
+          if (!ob.hasOwnProperty(i)) continue;
+          if ((typeof ob[i]) == 'object') {
+            if (Array.isArray(ob[i])) {
+              var flatObject = ob[i];
+            } else {
+              var flatObject = flattenObject(ob[i],'',{});
+            }
+            for (var x in flatObject) {
+              if (!flatObject.hasOwnProperty(x)) continue;
+              toReturn[addToKey+i+x] = flatObject[x];
+            }
+            for (var x in add) {
+              if (!flatObject.hasOwnProperty(x)) continue;
+              toReturn[addToKey+i+x] = flatObject[x];
+            }
+          } else {
+            toReturn[addToKey+i] = ob[i];
+          }
         }
-        for (var x in flatObject) {
-          if (!flatObject.hasOwnProperty(x)) continue;
-          toReturn[addToKey+i+x] = flatObject[x];
-        }
-        for (var x in add) {
-          if (!flatObject.hasOwnProperty(x)) continue;
-          toReturn[addToKey+i+x] = flatObject[x];
-        }
-      } else {
-        toReturn[addToKey+i] = ob[i];
-      }
-    }
-    return toReturn;
-  };
-})();
-
-    </script>
-  </dom-module>
+        return toReturn;
+      };
+    })();
+  </script>
+</dom-module>
