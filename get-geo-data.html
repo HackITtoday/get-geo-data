@@ -3,7 +3,7 @@
 
 <dom-module id="get-geo-data">
   <template id="geoTemplate">
-     <geo-hash-data output="{{dataH}}"></geo-hash-data>
+     <geo-hash-data allData={{allData}} output="{{dataH}}"></geo-hash-data>
   </template>
                     
   <script>
@@ -13,6 +13,10 @@
         is: 'get-geo-data',
         properties: {
           data:{
+            type: Array,
+            notify: true
+          },
+          allData {
             type: Array,
             notify: true
           },
