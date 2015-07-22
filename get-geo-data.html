@@ -16,6 +16,7 @@
             type: Array,
             notify: true
           },
+          dd:Array,
           all_data: {
             notify: true
           },
@@ -38,7 +39,9 @@
           if (this.geo != "gzzzzzzzzzzz") {
             this.loadData();
             console.log("calling loadData");
-          } 
+          } else {
+            this.data = this.dd; //default data 
+          }
         },
         loadData: function () { console.log("loadData");
           if (this.geo !== "") {
