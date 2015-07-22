@@ -19,10 +19,6 @@
           all_data: {
             notify: true
           },
-          cat: {
-            type: Array,
-            value:[{type:"Hotels"},{type:"Things to Do"},{type:"Destinations"},{type:"Food & Drink"}]
-          },
           geo: {
             type: String,
             value:"gzzzzzzzzzzz",
@@ -42,12 +38,7 @@
           if (this.geo != "gzzzzzzzzzzz") {
             this.loadData();
             console.log("calling loadData");
-          } else {
-            this.loadCat()
-          }
-        },
-        loadCat: function () {
-            this.data = this.cat;
+          } 
         },
         loadData: function () { console.log("loadData");
           if (this.geo !== "") {
